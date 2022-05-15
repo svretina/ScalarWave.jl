@@ -1,0 +1,13 @@
+name = "ScalarWave"
+uuid = "d1578bb7-266d-4c1b-9c3c-065a1b7c7acd"
+authors = ["Stamatis Vretinaris"]
+version = "0.1.0"
+
+[compat]
+julia = "1.5"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
