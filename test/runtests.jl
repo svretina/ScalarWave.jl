@@ -1,7 +1,6 @@
-using ScalarWave
-using Test
+using SafeTestsets
 
-@testset "ScalarWave.jl" begin
-    @test 1 == 1
-    # Write your tests here.
+
+@safetestset "domains.jl" begin
+    include("domain_tests.jl")
 end

@@ -2,6 +2,7 @@ module ScalarWave
 
 # Write your package code here.
 
-println("hello")
+include("domains.jl")
+include("grids.jl")
 
 end
