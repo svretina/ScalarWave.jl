@@ -1,3 +1,5 @@
+module domains
+
 """
 Struct to hold information about the physical
 domain of the numerical grid.
@@ -11,7 +13,9 @@ struct Domain{T<:Integer}
 end
 
 ## Constructor overloading to calculate dims from domain array
-function Domain(domain::Array{T}) where T<:Integer
+function Domain(domain::Array{T}) where {T<:Integer}
     dims = size(domain, 2)
     return Domain{T}(domain, dims)
+end
+
 end
