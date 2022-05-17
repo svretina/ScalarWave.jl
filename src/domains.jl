@@ -10,12 +10,16 @@ domain of the numerical grid.
 struct Domain{T<:Integer}
     domain::Array{T}
     dims::T
+    dmin::T
+    dmax::T
 end
 
 ## Constructor overloading to calculate dims from domain array
-function Domain(domain::Array{T}) where {T<:Integer}
-    dims = size(domain, 2)
-    return Domain{T}(domain, dims)
+function Domain(dom::Array{T}) where T<:Integer
+    dims = size(dom, 2)
+    dmin = min(dom...)
+    dmax = max(dom...)
+    return Domain(dom, dims, dmin, dmax)
 end
 
 end

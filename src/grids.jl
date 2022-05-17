@@ -1,37 +1,22 @@
-include("domains.jl")
-
 module grids
 
 import ..domains
+import ..utils
 
-struct Grid
-    domain::Int
-    ncells::Int
-    npoints::Int
-    coords::Array{AbstractFloat}
+struct Grid{T<:Integer}
+    domain::domains.Domain{T}
+    ncells::T
+    npoints::T
+    coords::Union{Array{AbstractFloat}, StepRangeLen{Float64, Base.TwicePrecision{Float64}, Base.TwicePrecision{Float64}, Int64}}
     spacing::AbstractFloat
-    dx::AbstractFloat
 end
 
 
-"""
-    spacing(xi::T, xn::T, ncells::S) where {T<:AbstractFloat, S<:Integer}
-
-Calculates the dx for an interval, given the start/end
-of the interval and the number of cells. The number of points is
-automatically calculated as ncells+1.
-
-# Input
-- `xi::T`: Initial point of grid.
-- `xn::T`: Last point of grid.
-- `ncells::S`: Number of cells of the grid.
-# Output
-   - `dx::AbstractFloat`: The grid spacing
-"""
-function spacing(xi::T, xn::T, ncells::S)::AbstractFloat where {T<:AbstractFloat,S<:Integer}
-    dx = (xn - xi) / n  # (n+1 -1)
-    return dx
+function Grid(domain::domains.Domain{T}, ncells::T) where T<:Integer
+    npoints = ncells + 1
+    coords = utils.discretize(domain.dmin, domain.dmax, ncells)
+    spacing = utils.spacing(domain, ncells)
+    return Grid(domain, ncells, npoints, coords, spacing)
 end
 
-
-end
+end # end of module

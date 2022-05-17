@@ -1,7 +1,7 @@
 module ScalarWave
 
-# include("utils.jl")
 include("domains.jl")
-#include("grids.jl")
+include("utils.jl")
+include("grids.jl")
 
 end
