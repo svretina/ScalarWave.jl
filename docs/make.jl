@@ -20,5 +20,5 @@ makedocs(;
 
 deploydocs(;
     repo="github.com/svretina/ScalarWave.jl",
-    devbranch="main",
+    devbranch="master",
 )
