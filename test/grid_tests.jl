@@ -15,7 +15,7 @@ end
 end
 
 @testset "grid_tests_coords" begin
-    @test gg.coords == [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    @test gg.coords == 0:0.1:1
     @test length(gg.coords) == ncells + 1
 end
 
