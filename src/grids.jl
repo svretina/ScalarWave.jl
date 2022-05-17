@@ -12,7 +12,7 @@ struct Grid{T<:Integer}
 end
 
 
-function Grid(domain::domains.Domain{T}, ncells::T) where T<:Integer
+function Grid(domain::domains.Domain{T}, ncells::T)::Grid where T<:Integer
     npoints = ncells + 1
     coords = utils.discretize(domain.dmin, domain.dmax, ncells)
     spacing = utils.spacing(domain, ncells)

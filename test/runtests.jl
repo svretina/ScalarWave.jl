@@ -4,6 +4,10 @@ using SafeTestsets
     include("domain_tests.jl")
 end
 
+@safetestset "utils.jl" begin
+    include("util_tests.jl")
+end
+
 @safetestset "grids.jl" begin
     include("grid_tests.jl")
 end
