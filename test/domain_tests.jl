@@ -1,6 +1,5 @@
-include("../src/ScalarWave.jl")
-
 using Test
+using ScalarWave
 
 @testset "domain_tests_domain" begin
     @test ScalarWave.domains.Domain([0, 1]).domain == [0, 1]
