@@ -21,5 +21,8 @@ function GridFunction(g::grids.Grid, f::Function)::GridFunction
     return GridFunction(g.coords, f.(g.coords))
 end
 
+function GridFunction(g::grids.Grid, y::Array{S})::GridFunction where S <: Real
+    return GridFunction(g.coords, y)
+end
 
 end # end of module

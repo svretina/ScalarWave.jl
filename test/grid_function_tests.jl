@@ -43,6 +43,17 @@ end
     @test ScalarWave.grid_functions.GridFunction(x,y).y == sin.(x)
 end
 
+@testset "gf_tests_grids" begin
+    d = ScalarWave.domains.Domain([0,1])
+    x = ScalarWave.grids.Grid(d, 10)
+    f = sin
+    @test ScalarWave.grid_functions.GridFunction(x, f).y == sin.(x.coords)
+
+    y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @test ScalarWave.grid_functions.GridFunction(x, y).y == y
+    @test ScalarWave.grid_functions.GridFunction(x, y).x == x.coords
+end
+
 
 @testset "gf_tests_dimensions" begin
     @test_throws DimensionMismatch ScalarWave.grid_functions.GridFunction([0, 1], [0,2,3])
