@@ -15,3 +15,7 @@ end
 @safetestset "grid_functions.jl" begin
     include("grid_function_tests.jl")
 end
+
+@safetestset "base.jl" begin
+    include("base_tests.jl")
+end

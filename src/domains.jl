@@ -15,7 +15,7 @@ struct Domain{T<:Integer}
 end
 
 ## Constructor overloading to calculate dims from domain array
-function Domain(dom::Array{T}) where T<:Integer
+function Domain(dom::T) where T
     dims = size(dom, 2)
     dmin = min(dom...)
     dmax = max(dom...)
