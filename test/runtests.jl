@@ -1,21 +1,21 @@
 using SafeTestsets
 
-@safetestset "domains.jl" begin
-    include("domain_tests.jl")
+@safetestset "Domains.jl" begin
+    include("DomainTests.jl")
 end
 
-@safetestset "utils.jl" begin
-    include("util_tests.jl")
+@safetestset "Utils.jl" begin
+    include("UtilTests.jl")
 end
 
-@safetestset "grids.jl" begin
-    include("grid_tests.jl")
+@safetestset "Grids.jl" begin
+    include("GridTests.jl")
 end
 
-@safetestset "grid_functions.jl" begin
-    include("grid_function_tests.jl")
+@safetestset "GridFunctions.jl" begin
+    include("GridFunctionTests.jl")
 end
 
-@safetestset "base.jl" begin
-    include("base_tests.jl")
+@safetestset "Base.jl" begin
+    include("BaseTests.jl")
 end

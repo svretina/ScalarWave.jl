@@ -1,10 +1,10 @@
-module grids
+module Grids
 
-import ..domains
-import ..utils
+import ..Domains
+import ..Utils
 
 struct Grid{T<:Integer}
-    domain::domains.Domain{T}
+    domain::Domains.Domain{T}
     ncells::T
     npoints::T
     coords::Union{Array{AbstractFloat}, StepRangeLen{Float64, Base.TwicePrecision{Float64}, Base.TwicePrecision{Float64}, Int64}}
@@ -14,8 +14,8 @@ end
 
 function Grid(domain::T, ncells::S)::Grid where {T, S}
     npoints = ncells + 1
-    coords = utils.discretize(domain.dmin, domain.dmax, ncells)
-    spacing = utils.spacing(domain, ncells)
+    coords = Utils.discretize(domain.dmin, domain.dmax, ncells)
+    spacing = Utils.spacing(domain, ncells)
     return Grid(domain, ncells, npoints, coords, spacing)
 end
 

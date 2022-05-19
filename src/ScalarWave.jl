@@ -1,9 +1,9 @@
 module ScalarWave
 
-include("domains.jl")
-include("utils.jl")
-include("grids.jl")
-include("grid_functions.jl")
-include("base.jl")
+include("Domains.jl")
+include("Utils.jl")
+include("Grids.jl")
+include("GridFunctions.jl")
+include("Base.jl")
 
 end

@@ -1,6 +1,6 @@
-module grid_functions
+module GridFunctions
 
-import ..grids
+import ..Grids
 
 struct GridFunction{T<:Union{Array{D} where D <: Real, StepRange{Int64, Int64}, StepRangeLen{Float64, Base.TwicePrecision{Float64}, Base.TwicePrecision{Float64}, Int64}}, S<:Real}
     x::T
@@ -15,11 +15,11 @@ function GridFunction(x::T, f::Function)::GridFunction where {T}
     return GridFunction(x, f.(x))
 end
 
-function GridFunction(g::grids.Grid{T}, f::Function)::GridFunction where T
+function GridFunction(g::Grids.Grid{T}, f::Function)::GridFunction where T
     return GridFunction(g.coords, f.(g.coords))
 end
 
-function GridFunction(g::grids.Grid{T}, y::Array{<:Real})::GridFunction where T
+function GridFunction(g::Grids.Grid{T}, y::Array{<:Real})::GridFunction where T
     return GridFunction(g.coords, y)
 end
 

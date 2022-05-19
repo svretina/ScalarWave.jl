@@ -1,4 +1,4 @@
-module domains
+module Domains
 
 """
 Struct to hold information about the physical

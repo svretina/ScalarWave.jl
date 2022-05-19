@@ -1,6 +1,6 @@
-module utils
+module Utils
 
-import ..domains
+import ..Domains
 
 function discretize(ui::T, uf::T, nu::S) where {T<:Real, S<:Integer}
     du = spacing(ui, uf, nu)
@@ -14,7 +14,7 @@ function spacing(xi::T, xn::T, ncells::Integer)::AbstractFloat where {T<:Real}
     return dx
 end
 
-function spacing(domain::domains.Domain, ncells::T)::AbstractFloat where T<:Integer
+function spacing(domain::Domains.Domain, ncells::T)::AbstractFloat where T<:Integer
     dx = (domain.dmax - domain.dmin) / ncells  # (n+1 -1)
     return dx
 end
