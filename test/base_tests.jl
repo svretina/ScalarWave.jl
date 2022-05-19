@@ -2,7 +2,7 @@ using Test
 using ScalarWave
 
 
-@testset "gf_base_equality" begin
+@testset "gf_base_isapprox" begin
     a = ScalarWave.grid_functions.GridFunction([0,1,2], [0,0,0])
     b = ScalarWave.grid_functions.GridFunction([0,1,2], [0,0,0])
     @test isapprox(a,1e-16, atol=1e-15)
@@ -378,18 +378,6 @@ end
     a = ScalarWave.grid_functions.GridFunction([0,1,2,3], y)
     @test abs2(a) == abs.(y).^2
     @test abs2(a) == abs2.(y)
-end
-
-@testset "gf_base_sign" begin
-    y = [1, 2, 3, 4]
-    a = ScalarWave.grid_functions.GridFunction([0,1,2,3], y)
-    @test sign(a) == sign.(y)
-end
-
-@testset "gf_base_signbit" begin
-    y = [1, 2, 3, 4]
-    a = ScalarWave.grid_functions.GridFunction([0,1,2,3], y)
-    @test signbit(a) == signbit.(y)
 end
 
 @testset "gf_base_sqrt" begin
