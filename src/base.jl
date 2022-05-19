@@ -1,11 +1,123 @@
 module base
 
 import ..grid_functions
-import Base.+
+
+#################
+## isapprox
+#################
+import Base.isapprox
+function isapprox(gf::grid_functions.GridFunction{T, S}, number::R; atol::Real=0, rtol::Real=0, nans::Bool=false, norm::Function=abs) where {T, S, R}
+    all(isapprox.(gf.y, number; atol, rtol, nans, norm))
+end
+
+function isapprox(number::R, gf::grid_functions.GridFunction{T, S}; atol::Real=0, rtol::Real=0, nans::Bool=false, norm::Function=abs) where {R, T, S}
+    all(isapprox.(number, gf.y; atol, rtol, nans, norm))
+end
+
+function isapprox(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}; atol::Real=0, rtol::Real=0, nans::Bool=false, norm::Function=abs) where {T, S, K, L}
+    gf1.x == gf2.x && all(isapprox.(gf1.y, gf2.y; atol, rtol, nans, norm)) || throw(DimensionMismatch("x's or y's are not the same"))
+end
+
+#################
+## equality
+#################
+import Base.==
+function ==(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
+    all(gf.y .== number)
+end
+
+function ==(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
+    all(number .== gf.y)
+end
+
+function ==(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
+    gf1.x == gf2.x && gf1.y == gf2.y || throw(DimensionMismatch("x's or y's are not the same"))
+end
+
+#################
+## not-equality
+#################
+import Base.!=
+function !=(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
+    all(gf.y != number)
+end
+
+function !=(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
+    all(number != gf.y)
+end
+
+function !=(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
+    gf1.x == gf2.x && gf1.y != gf2.y || throw(DimensionMismatch("x's are not the same"))
+end
+
+#################
+## less
+#################
+import Base.<
+function <(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
+    all(gf.y .< number)
+end
+
+function <(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
+    all(number .< gf.y)
+end
+
+function <(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
+    gf1.x == gf2.x && all(gf1.y .< gf2.y) || throw(DimensionMismatch("x's not the same"))
+end
+
+#################
+## less-equality
+#################
+import Base.<=
+function <=(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
+    all(gf.y .<= number)
+end
+
+function <=(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
+    all(number .<= gf.y)
+end
+
+function <=(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
+    gf1.x == gf2.x && all(gf1.y .<= gf2.y) || throw(DimensionMismatch("x's not the same"))
+end
+
+#################
+## greater
+#################
+import Base.>
+function >(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
+    all(gf.y .> number)
+end
+
+function >(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
+    all(number .> gf.y)
+end
+
+function >(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
+    gf1.x == gf2.x && all(gf1.y .> gf2.y) || throw(DimensionMismatch("x's not the same"))
+end
+
+#################
+## greater-equality
+#################
+import Base.>=
+function >=(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
+    all(gf.y .>= number)
+end
+
+function >=(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
+    all(number .>= gf.y)
+end
+
+function >=(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
+    gf1.x == gf2.x && all(gf1.y .>= gf2.y) || throw(DimensionMismatch("x's not the same"))
+end
 
 #################
 ## Addition
 #################
+import Base.+
 function +(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
     return grid_functions.GridFunction(gf.x, gf.y .+ number)
 end
@@ -106,103 +218,6 @@ function ^(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunct
 end
 
 #################
-## equality
-#################
-import Base.==
-function ==(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
-    all(gf.y .== number)
-end
-
-function ==(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
-    all(number .== gf.y)
-end
-
-function ==(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
-    gf1.x == gf2.x && gf1.y == gf2.y || throw(DimensionMismatch("x's or y's are not the same"))
-end
-
-#################
-## not-equality
-#################
-import Base.!=
-function !=(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
-    all(gf.y != number)
-end
-
-function !=(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
-    all(number != gf.y)
-end
-
-function !=(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
-    gf1.x == gf2.x && gf1.y != gf2.y || throw(DimensionMismatch("x's are not the same"))
-end
-
-#################
-## less
-#################
-import Base.<
-function <(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
-    all(gf.y .< number)
-end
-
-function <(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
-    all(number .< gf.y)
-end
-
-function <(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
-    gf1.x == gf2.x && all(gf1.y .< gf2.y) || throw(DimensionMismatch("x's not the same"))
-end
-
-#################
-## less-equality
-#################
-import Base.<=
-function <=(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
-    all(gf.y .<= number)
-end
-
-function <=(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
-    all(number .<= gf.y)
-end
-
-function <=(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
-    gf1.x == gf2.x && all(gf1.y .<= gf2.y) || throw(DimensionMismatch("x's not the same"))
-end
-
-#################
-## greater
-#################
-import Base.>
-function >(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
-    all(gf.y .> number)
-end
-
-function >(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
-    all(number .> gf.y)
-end
-
-function >(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
-    gf1.x == gf2.x && all(gf1.y .> gf2.y) || throw(DimensionMismatch("x's not the same"))
-end
-
-#################
-## greater-equality
-#################
-import Base.>=
-function >=(gf::grid_functions.GridFunction{T, S}, number::R) where {T, S, R}
-    all(gf.y .>= number)
-end
-
-function >=(number::R, gf::grid_functions.GridFunction{T, S}) where {R, T, S}
-    all(number .>= gf.y)
-end
-
-function >=(gf1::grid_functions.GridFunction{T, S}, gf2::grid_functions.GridFunction{K, L}) where {T, S, K, L}
-    gf1.x == gf2.x && all(gf1.y .>= gf2.y) || throw(DimensionMismatch("x's not the same"))
-end
-
-
-#################
 ## sinx
 #################
 import Base.sin
@@ -214,7 +229,7 @@ end
 ## cosx
 #################
 import Base.cos
-function sin(gf::grid_functions.GridFunction{T, S}) where {T, S}
+function cos(gf::grid_functions.GridFunction{T, S}) where {T, S}
     return grid_functions.GridFunction(gf.x, cos.(gf.y))
 end
 
@@ -459,14 +474,6 @@ function max(gf::grid_functions.GridFunction{T, S}) where {T, S}
 end
 
 #################
-## minmax
-#################
-import Base.minmax
-function minmax(gf::grid_functions.GridFunction{T, S}) where {T, S}
-    return minmax(gf.y...)
-end
-
-#################
 ## abs
 #################
 import Base.abs
@@ -496,7 +503,7 @@ end
 #################
 import Base.signbit
 function signbit(gf::grid_functions.GridFunction{T, S}) where {T, S}
-    return grid_functions.GridFunction(gf.x, signbit.(gf.y))
+    return grid_functions.GridFunction(gf.x, collect(signbit.(gf.y)))
 end
 
 #################
