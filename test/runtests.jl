@@ -19,3 +19,7 @@ end
 @safetestset "Base.jl" begin
     include("BaseTests.jl")
 end
+
+@safetestset "SphericalHarmonics.jl" begin
+    include("SphericalHarmonicsTests.jl")
+end

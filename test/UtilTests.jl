@@ -28,3 +28,13 @@ end
     d = ScalarWave.Domains.Domain([0, 2])
     @test ScalarWave.Utils.spacing(d, 10) == 0.2
 end
+
+@testset "spherica2cartesian tests" begin
+    r = 5.
+    θ = π /2
+    ϕ = 0.
+    x, y, z = ScalarWave.Utils.Spherical2Cartesian(r, θ, ϕ)
+    @test isapprox(x, 5, atol=1e-15)
+    @test isapprox(y, 0, atol=1e-15)
+    @test isapprox(z, 0, atol=1e-15)
+end

@@ -19,4 +19,11 @@ function spacing(domain::Domains.Domain, ncells::T)::AbstractFloat where T<:Inte
     return dx
 end
 
+function Spherical2Cartesian(r::T, θ::R, ϕ::S) where {T<:Real, R<:Real, S<:Real}
+    x = @. r * cos(ϕ) * sin(θ)
+    y = @. r * sin(ϕ) * sin(θ)
+    z = @. r * cos(θ)
+    return x, y, z
+end
+
 end
