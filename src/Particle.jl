@@ -65,8 +65,6 @@ function decompose!(coefs::Array, func::Function, time_grid::Union{Array,StepRan
     return nothing
 end
 
-
-
 clight = 1
 lmax = 40
 Ω = 0.5*clight/5
@@ -90,8 +88,5 @@ for ll in range(0, 8)
         MyPlots.plot_mode(t, y2, "Chi", ll, mm)
     end
 end
-
-
-
 
 end # end of module

@@ -7,7 +7,7 @@ include("GridFunctions.jl")
 include("Base.jl")
 include("SphericalHarmonics.jl")
 include("MyPlots.jl")
-include("Particle.jl")
+# include("Particle.jl")
 
 
 end
