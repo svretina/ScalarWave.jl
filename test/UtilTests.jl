@@ -33,7 +33,7 @@ end
     r = 5.
     θ = π /2
     ϕ = 0.
-    x, y, z = ScalarWave.Utils.Spherical2Cartesian(r, θ, ϕ)
+    x, y, z = ScalarWave.Utils.spherical2cartesian(r, θ, ϕ)
     @test isapprox(x, 5, atol=1e-15)
     @test isapprox(y, 0, atol=1e-15)
     @test isapprox(z, 0, atol=1e-15)
