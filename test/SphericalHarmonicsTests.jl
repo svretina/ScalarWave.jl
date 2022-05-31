@@ -9,7 +9,7 @@ using PyCall
     @test length(ϕ) == 2*lmax + 1
 end
 
-@testset "Decompose tests" begin
+@testset "decompose tests" begin
     lmax = 10
     θ, ϕ = ScalarWave.SphericalHarmonics.GaussLegendreGrid(lmax, radians=true)
     ylm = zeros(ComplexF64,length(θ), length(ϕ))
@@ -18,7 +18,7 @@ end
             ylm[i,j] = cos(θᵢ)
         end
     end
-    coefs = ScalarWave.SphericalHarmonics.Decompose(ylm, lmax)
+    coefs = ScalarWave.SphericalHarmonics.decompose(ylm, lmax)
     l, m = 1, 0
     @test coefs[:,1+l,1+m] != 0
     coefs[1,1+l, 1+m] = 0
