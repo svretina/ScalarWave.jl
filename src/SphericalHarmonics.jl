@@ -31,7 +31,7 @@ function _decompose!(cout::AbstractArray, data::AbstractArray, lmax::Int)
 end
 
 function decompose!(coefs::AbstractArray, func::Function, time_grid::Union{Array,StepRangeLen}, radius::Real, lmax::Int)
-    println("constant radius")
+    # println("constant radius")
     @assert size(coefs) == (length(time_grid), lmax+1, lmax+1)
     # get Gauss-Legendre Grid
     θᴳ, ϕᴳ = GaussLegendreGrid(lmax)
@@ -52,7 +52,7 @@ function decompose!(coefs::AbstractArray, func::Function, time_grid::Union{Array
 end
 
 function decompose!(coefs::AbstractArray, func::Function, time_instance::Real, spatial_grid::Union{Array,StepRangeLen}, lmax::Int)
-    println("constant time")
+    # println("constant time")
     @assert size(coefs) == (length(spatial_grid), lmax+1, lmax+1)
     println("constant time")
     # get Gauss-Legendre Grid

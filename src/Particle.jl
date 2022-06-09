@@ -25,7 +25,7 @@ function ΦCart(t::T, x::R, y::S, z::X) where {T<:Real, R<:Real, S<:Real, X<:Rea
     return 1 / (norm(R⃗ᵣ)-dot(R⃗ᵣ, v⃗)/clight)
 end
 
-function Φ(t::T, r::R, θ::S, ϕ::X) where {T<:Real, R<:Real, S<:Real, X<:Real}
+function φ(t::T, r::R, θ::S, ϕ::X) where {T<:Real, R<:Real, S<:Real, X<:Real}
     clight = 1
     radius_of_orbit = 5
     particle_speed = 0.5
@@ -36,10 +36,25 @@ function Φ(t::T, r::R, θ::S, ϕ::X) where {T<:Real, R<:Real, S<:Real, X<:Real}
     r⃗′= @SVector [radius_of_orbit * cos(Ω*t); radius_of_orbit * sin(Ω*t); 0]
     R⃗ = r⃗ - r⃗′
     tᵣ = t - norm(R⃗)/clight
+    # r⃗′= [radius_of_orbit * cos(Ω*t); radius_of_orbit * sin(Ω*t); 0]
+    return Ω*tᵣ
+end
+
+function Φ(t::T, r::R, θ::S, ϕ::X) where {T<:Real, R<:Real, S<:Real, X<:Real}
+    clight = 1
+    radius_of_orbit = 5
+    particle_speed = 0.5
+    Ω = particle_speed * clight / radius_of_orbit
+
+    x, y, z = Utils.spherical2cartesian(r, θ, ϕ)
+    r⃗ = @SVector [x,y,z]
+    r⃗′= @SVector [radius_of_orbit * cos(Ω*t); radius_of_orbit * sin(Ω*t); 0]
+    R⃗ = r⃗ .- r⃗′
+    tᵣ = t - norm(R⃗)/clight
     ω⃗ = @SVector [0;0;Ω]
     r⃗′ᵣ = @SVector [radius_of_orbit * cos(Ω*tᵣ); radius_of_orbit * sin(Ω*tᵣ); 0]
     v⃗ = cross(ω⃗, r⃗′ᵣ)
-    R⃗ᵣ = r⃗-r⃗′ᵣ
+    R⃗ᵣ = r⃗ .- r⃗′ᵣ
     return norm(R⃗ᵣ) / (norm(R⃗ᵣ)-dot(R⃗ᵣ, v⃗)/clight)
 end
 

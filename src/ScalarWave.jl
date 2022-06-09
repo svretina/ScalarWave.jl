@@ -9,7 +9,7 @@ include("SphericalHarmonics.jl")
 include("Particle.jl")
 include("MyPlots.jl")
 include("ODE.jl")
-include("ExecSBP.jl")
+# include("ExecSBP.jl")
 
 function runt(func::Function, varname::String)
     c = 1
@@ -64,9 +64,54 @@ end
 # runt(Particle.Φ, "Φt")
 # runt(Particle.ξ, "xit")
 # runr(Particle.ξ, "xir")
+import SummationByPartsOperators as SBPO
+using CairoMakie
+xmin, xmax = 100., 300.
+N = 401
+D = SBPO.derivative_operator(SBPO.DienerDorbandSchnetterTiglio2007(),
+                            derivative_order=1,
+                            accuracy_order=2,
+                            xmin=xmin, xmax=xmax,
+                            N=N)
+# spatial grid
+lmax = 40
+l, m = 2, 2
+xs = SBPO.grid(D)
+coefs_ϕ = zeros(ComplexF64, N, lmax+1, lmax+1)
+Ω = 0.5*1/5
+Nₜ = 201
+t = range(0, 4 * 2π/Ω, length=Nₜ)
+φ = real(Particle.get_mode(coefs_ϕ, l, m))
+fig = Figure()
+ax1 = Axis(fig[1,1:2], title = L"φ_{%$(l)%$(m)}")
+ylims!(ax1, -1, 1)
+record(fig, "analytic_simulation.gif", 1:Nₜ) do i
+    empty!(ax1)
+    SphericalHarmonics.decompose!(coefs_ϕ, Particle.Φ, t[i], xs, lmax)
+    φ = real(Particle.get_mode(coefs_ϕ, l, m))
+    lines!(ax1, xs, φ, color=:blue)
+end
 
-
-# include("ExecSBP.jl")
-
-
+# xdip = xs[114]
+# vlines!(ax1, xdip, ymin=0.2, ymax=0.8)
+# xdip2 = xs[91]
+# vlines!(ax1, xdip2, ymin=0.2, ymax=1.2)
+# xdip3 = xs[138]
+# vlines!(ax1, xdip3, ymin=0.2, ymax=1.2)
+#
+# ax2 = Axis(f[2,1:2], title = L"angle")
+# ϕs = rad2deg.(mod.(Particle.φ.(0, xs, π/2, 0), 2π))
+# @show ϕs[114], ϕs[91], ϕs[138]
+# @show cos(ϕs[114]), sin(ϕs[114])
+# vlines!(ax2, xdip, ymin=0, ymax=360)
+#
+# hlines!(ax2, ϕs[114], xmin=0, xmax=160)
+# hlines!(ax2, ϕs[91], xmin=0, xmax=160)
+# hlines!(ax2, ϕs[138], xmin=0, xmax=160)
+# lines!(ax2, xs, ϕs, label="angle")
+# lines!(ax2, xs, π.*ones(length(xs)))
+# axislegend(ax1)
+# axislegend(ax2)
+# display(f)
+# save("angle.png", f)
 end
