@@ -7,19 +7,17 @@ domain of the numerical grid.
 - domain:  the physical domai e.g [0,1] or [0,1]U[1,2]
 - dims: number of dimensions of the domain e.g 1 for the first case or 2 for the 2nd
 """
-struct Domain{T<:Integer}
-    domain::Array{T}
-    dims::T
+struct Domain{T<:Real}
+    domain::Vector{T}
     dmin::T
     dmax::T
 end
 
 ## Constructor overloading to calculate dims from domain array
-function Domain(dom::T) where T
-    dims = size(dom, 2)
-    dmin = min(dom...)
-    dmax = max(dom...)
-    return Domain(dom, dims, dmin, dmax)
+function Domain(dom::Vector{<:Real})
+    dmin = min(dom[begin], dom[end])
+    dmax = max(dom[begin], dom[end])
+    return Domain(dom, dmin, dmax)
 end
 
 end

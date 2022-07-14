@@ -8,10 +8,13 @@ CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 SHTOOLS = "c916fbc8-b869-4f3a-86b1-58538899335e"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+SummationByPartsOperators = "9f78cca6-572e-554e-b819-917d2f1cf240"
 
 [compat]
 julia = "1.7"

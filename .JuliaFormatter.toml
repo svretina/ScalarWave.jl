@@ -1,6 +1,6 @@
 style = "yas"
 indent = 4
-margin = 132
+margin = 79
 always_for_in = true
 whitespace_ops_in_indices = true
 whitespace_typedefs = false
@@ -8,3 +8,4 @@ remove_extra_newlines = true
 import_to_using = false
 pipe_to_function_call = true
 short_to_long_function_def = true
+always_use_return = false

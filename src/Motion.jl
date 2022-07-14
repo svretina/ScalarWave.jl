@@ -4,51 +4,64 @@ using CairoMakie
 using ForwardDiff
 using DifferentialEquations
 
-φ(t, x, y, z) = sin(t) / sqrt(x^2 + y^2 + z^2)
+# (1 - 0.1 * sin(2π * 1 * t))
+φ(t, x, y, z) = 1 / sqrt(x^2 + y^2 + z^2)
 ∇₀φ(t, x, y, z) = ForwardDiff.derivative(tt -> φ(tt, x, y, z), t)
 ∇₁φ(t, x, y, z) = ForwardDiff.derivative(xx -> φ(t, xx, y, z), x)
 ∇₂φ(t, x, y, z) = ForwardDiff.derivative(yy -> φ(t, x, yy, z), y)
 ∇₃φ(t, x, y, z) = ForwardDiff.derivative(zz -> φ(t, x, y, zz), z)
 
 function rhs!(du, u, p, t)
-    c = 3e8
+    c = 1 #3e8
     q = 1
-    mass = u[1]
+    m = u[1]
     x, y, z = u[2], u[3], u[4]
-    ux, uy, uz = u[5], u[6], u[7]
-    u = sqrt(ux^2 + uy^2 + uz^2)
-    γ = 1 / sqrt(1 - u^2 / c^2)
-    u∇φ = c * ∇₀φ(t, x, y, z) + ux * ∇₁φ(t, x, y, z) + uy * ∇₂φ(t, x, y, z) + uz * ∇₃φ(t, x, y, z)
+    u₁, u₂, u₃ = u[5], u[6], u[7]
+    ∂ₜm = du[1]
+    ∂ₜx, ∂ₜy, ∂ₜz = du[2], du[3], du[4]
+    ∂ₜu₁, ∂ₜu₂, ∂ₜu₃ = du[5], du[6], du[7]
+    γ = sqrt(1 + (u₁^2 + u₂^2 + u₃^2) / c^2)
+    u₀ = γ * c
 
-    # dm/dt = (q/γ)u∇Φ
-    du[1] = (q / γ) * u∇φ
-    # dx^μ/dt = u^μ
-    du[2] = -(1 / γ) * ux
-    du[3] = -(1 / γ) * uy
-    du[4] = -(1 / γ) * uz
+    u∇φ = u₀ * ∇₀φ(t, x, y, z) + u₁ * ∇₁φ(t, x, y, z) + u₂ * ∇₂φ(t, x, y, z) + u₃ * ∇₃φ(t, x, y, z)
 
-    # du^μ / dt  = -q/mγ ( ∇φ + u * u∇φ)
-    du[5] = -(q / (mass * γ)) * (∇₁φ(x, y, z) + ux * u∇φ)
-    du[6] = -(q / (mass * γ)) * (∇₂φ(x, y, z) + uy * u∇φ)
-    du[7] = -(q / (mass * γ)) * (∇₃φ(x, y, z) + uz * u∇φ)
+    ∂ₜm = -(q / γ) * u∇φ
+    ∂ₜx = u₁ / γ
+    ∂ₜy = u₂ / γ
+    ∂ₜz = u₃ / γ
+    ∂ₜu₁ = (q / (m * γ)) * (∇₁φ(t, x, y, z) + u₁ * u∇φ)
+    ∂ₜu₂ = (q / (m * γ)) * (∇₂φ(t, x, y, z) + u₂ * u∇φ)
+    ∂ₜu₃ = (q / (m * γ)) * (∇₃φ(t, x, y, z) + u₃ * u∇φ)
+
+    u[1] = m
+    u[2], u[3], u[4] = x, y, z
+    u[5], u[6], u[7] = u₁, u₂, u₃
+    du[1] = ∂ₜm
+    du[2], du[3], du[4] = ∂ₜx, ∂ₜy, ∂ₜz
+    du[5], du[6], du[7] = ∂ₜu₁, ∂ₜu₂, ∂ₜu₃
     return nothing
 end
 
-tf = 1500
+tf = 1 * 9
 tspan = (0.0, tf)
-N = 2000
+N = 100 # tf * 2
 ts = range(0, tf, length = N + 1)
 dt = step(ts)
+# Initial Data
 m0 = 1
 x0, y0, z0 = 2, 0, 0
-vx0, vy0, vz0 = 0, 0.6, 0
+vx0, vy0, vz0 = 0, 0.3, 0
 u0 = [m0, x0, y0, z0, vx0, vy0, vz0]
+
+#Energy calculation
+PotentialEnergy = ∇₁φ(0, x0, y0, z0) + ∇₂φ(0, x0, y0, z0) + ∇₃φ(0, x0, y0, z0)
+KineticEnergy = 0.5 * m0 * (vx0^2 + vy0^2 + vz0^2)
+Energy = KineticEnergy + PotentialEnergy
+@assert Energy < 0
+
+#ODE setup
 prob = ODEProblem(rhs!, u0, tspan)
-# sys = modelingtoolkitize(prob)
-# jac = eval(ModelingToolkit.generate_jacobian(sys)[2])
-# f = ODEFunction(rhs!, jac = jac)
-# prob_jac = ODEProblem(f, u0, tspan)
-sol = solve(prob, Tsit5(), saveat = ts)
+sol = solve(prob, AutoTsit5(Kvaerno5()), saveat = ts)
 
 f = Figure(resolution = (800, 500))
 ax1 = Axis(f[1:2, 1:2], title = L"mass", titlesize = 20)
@@ -67,3 +80,8 @@ xlims!(ax3, ts[begin], ts[end])
 
 display(f)
 println("done")
+
+# sys = modelingtoolkitize(prob)
+# jac = eval(ModelingToolkit.generate_jacobian(sys)[2])
+# f = ODEFunction(rhs!, jac = jac)
+# prob_jac = ODEProblem(f, u0, tspan)

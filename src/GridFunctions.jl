@@ -2,25 +2,39 @@ module GridFunctions
 
 import ..Grids
 
-struct GridFunction{T<:Union{Array{D} where D <: Real, StepRange{Int64, Int64}, StepRangeLen{Float64, Base.TwicePrecision{Float64}, Base.TwicePrecision{Float64}, Int64}}, S<:Real}
-    x::T
-    y::Array{S}
-    function GridFunction(x::T, y::Array{S}) where {T, S}
+struct GridFunction
+    x::Array{<:Union{AbstractFloat,Int}}
+    y::Array{<:Union{AbstractFloat,Int}}
+    function GridFunction(x::Array{T}, y::Array{S}) where {T,S}
         length(x) == length(y) || throw(DimensionMismatch("GridFunction: x has different length from y."))
-        new{T, S}(x, y)
+        return new(x, y)
     end
 end
 
-function GridFunction(x::T, f::Function)::GridFunction where {T}
+function GridFunction(x::Array{<:Union{AbstractFloat,Int}}, f::Function)::GridFunction
     return GridFunction(x, f.(x))
 end
 
-function GridFunction(g::Grids.Grid{T}, f::Function)::GridFunction where T
+function GridFunction(g::Grids.Grid, f::Function)::GridFunction
     return GridFunction(g.coords, f.(g.coords))
 end
 
-function GridFunction(g::Grids.Grid{T}, y::Array{<:Real})::GridFunction where T
+function GridFunction(g::Grids.Grid, y::Array{<:Real})::GridFunction
     return GridFunction(g.coords, y)
+end
+
+function integrate(vector::GridFunction, dx::AbstractFloat)::AbstractFloat
+    boundary_terms = 0.5 * (vector.y[begin] + vector.y[end])
+    interior = sum(vector.y[(begin + 1):(end - 1)])
+    result = boundary_terms + interior
+    return result * dx
+end
+
+function integrate(vector::Array{<:AbstractFloat}, dx::AbstractFloat)::AbstractFloat
+    boundary_terms = 0.5 * (vector[begin] + vector[end])
+    interior = sum(vector[2:(end - 1)])
+    result = boundary_terms + interior
+    return result * dx
 end
 
 end # end of module
