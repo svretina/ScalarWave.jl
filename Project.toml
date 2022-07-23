@@ -17,6 +17,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 SummationByPartsOperators = "9f78cca6-572e-554e-b819-917d2f1cf240"
 
 [compat]
+SummationByPartsOperators = "0.5"
 julia = "1.7"
 
 [extras]
